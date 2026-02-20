@@ -3,17 +3,18 @@
 declare(strict_types=1);
 
 namespace Src\MatchMaker\Player;
-abstract class AbstractPlayer
+
+abstract class AbstractPlayer implements PlayerInterface
+{
+    public function __construct(public string $name = 'anonymous', public float $ratio = 400.0)
     {
-        public function __construct(public string $name = 'anonymous', public float $ratio = 400.0)
-        {
-        }
-
-        abstract public function getName(): string;
-
-        abstract public function getRatio(): float;
-
-        abstract protected function probabilityAgainst(self $player): float;
-
-        abstract public function updateRatioAgainst(self $player, int $result): void;
     }
+
+    abstract public function getName(): string;
+
+    abstract public function getRatio(): float;
+
+    abstract protected function probabilityAgainst(PlayerInterface $player): float;
+
+    abstract public function updateRatioAgainst(PlayerInterface $player, int $result): void;
+}
