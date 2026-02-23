@@ -7,6 +7,7 @@ spl_autoload_register(static function ($fqcn): void {
     require_once $path;
 });
 
+use Src\Domain\Exceptions\NotEnoughPlayersException;
 use Src\Domain\MatchMaker\Encounter\Score;
 use Src\Domain\MatchMaker\Lobby;
 use Src\Domain\MatchMaker\Player\Player;
@@ -19,12 +20,16 @@ $lobby->addPlayer($greg);
 $lobby->addPlayer($chuckNorris);
 
 while (count($lobby->queuingPlayers)) {
-    $lobby->createEncounters();
+    try {
+        $lobby->createEncounters();
+    } catch (NotEnoughPlayersException $e) {
+        break;
+    }
 }
 
 $encounter = end($lobby->encounters);
 
-// ces scores sont fictifs !
+// Imaginary scores
 $encounter->setScores(
     new Score(score: 42, player: $greg),
     new Score(score: 1, player: $chuckNorris)
